@@ -1,12 +1,12 @@
 <!-- =========================
-FILE: index.html
+FILE: index.html - Kenali Dirimu with Multiplayer
 ========================= -->
 <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Kenali Dirimu</title>
+  <title>Kenali Dirimu - Multiplayer</title>
 
   <!-- Font Poppins -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -54,6 +54,96 @@ body{
   justify-content:center;
   align-items:center;
   padding:20px;
+}
+
+/* =========================
+SETUP SCREEN
+========================= */
+
+.setup-screen{
+  background:white;
+  border-radius:30px;
+  padding:40px;
+  box-shadow:0 20px 40px rgba(0,0,0,0.15);
+  text-align:center;
+  max-width:500px;
+}
+
+.setup-screen h1{
+  color:#6d28d9;
+  font-size:36px;
+  margin-bottom:10px;
+}
+
+.setup-screen p{
+  color:#666;
+  margin-bottom:30px;
+}
+
+.player-count-btn{
+  padding:15px 30px;
+  margin:10px;
+  border:2px solid #ddd;
+  background:white;
+  border-radius:15px;
+  font-size:18px;
+  cursor:pointer;
+  transition:0.3s;
+  font-weight:600;
+}
+
+.player-count-btn:hover{
+  background:#f0f0f0;
+  border-color:#8b5cf6;
+}
+
+.player-count-btn.active{
+  background:linear-gradient(135deg,#60a5fa,#8b5cf6);
+  color:white;
+  border-color:#8b5cf6;
+}
+
+.input-group{
+  margin:20px 0;
+  text-align:left;
+}
+
+.input-group label{
+  display:block;
+  margin-bottom:8px;
+  color:#333;
+  font-weight:600;
+}
+
+.input-group input{
+  width:100%;
+  padding:12px;
+  border:2px solid #ddd;
+  border-radius:10px;
+  font-size:16px;
+  font-family:'Poppins',sans-serif;
+}
+
+.start-btn{
+  width:100%;
+  padding:15px;
+  margin-top:20px;
+  border:none;
+  border-radius:15px;
+  background:linear-gradient(135deg,#60a5fa,#8b5cf6);
+  color:white;
+  font-size:18px;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.start-btn:hover{
+  transform:scale(1.02);
+}
+
+.hidden{
+  display:none;
 }
 
 /* =========================
@@ -158,6 +248,16 @@ CENTER PANEL
   margin-bottom:20px;
 }
 
+.current-player{
+  background:linear-gradient(135deg,#818cf8,#c084fc);
+  color:white;
+  padding:10px 20px;
+  border-radius:15px;
+  font-size:16px;
+  margin-bottom:15px;
+  font-weight:600;
+}
+
 .score-box{
   background:linear-gradient(135deg,#818cf8,#c084fc);
   color:white;
@@ -204,6 +304,11 @@ CENTER PANEL
   transform:scale(1.05);
 }
 
+#rollBtn:disabled{
+  opacity:0.5;
+  cursor:not-allowed;
+}
+
 .dice-result{
   margin-top:20px;
   font-size:20px;
@@ -211,7 +316,54 @@ CENTER PANEL
 }
 
 /* =========================
-PLAYER
+PLAYERS INFO SIDEBAR
+========================= */
+
+.players-sidebar{
+  position:absolute;
+  right:20px;
+  top:20px;
+  background:rgba(255,255,255,0.9);
+  padding:20px;
+  border-radius:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.1);
+  max-height:500px;
+  overflow-y:auto;
+  min-width:200px;
+}
+
+.players-sidebar h3{
+  color:#6d28d9;
+  margin-bottom:15px;
+}
+
+.player-info{
+  padding:10px;
+  margin:8px 0;
+  border-radius:10px;
+  background:#f5f5f5;
+  border-left:4px solid #60a5fa;
+  font-size:14px;
+}
+
+.player-info.active{
+  background:linear-gradient(135deg,#fef3c7,#fef08a);
+  border-left-color:#f59e0b;
+  font-weight:600;
+}
+
+.player-name{
+  font-weight:600;
+  color:#333;
+}
+
+.player-score{
+  color:#666;
+  font-size:12px;
+}
+
+/* =========================
+PLAYER TOKENS
 ========================= */
 
 .player{
@@ -219,15 +371,27 @@ PLAYER
   width:28px;
   height:28px;
   border-radius:50%;
-  background:#ef4444;
   border:3px solid white;
   transition:
     top 0.45s ease,
     left 0.45s ease;
 
   z-index:10;
-  box-shadow:0 0 15px rgba(239,68,68,0.9);
+  box-shadow:0 0 15px rgba(0,0,0,0.3);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:white;
+  font-weight:bold;
+  font-size:12px;
 }
+
+.player.p1{ background:#ef4444; }
+.player.p2{ background:#3b82f6; }
+.player.p3{ background:#10b981; }
+.player.p4{ background:#f59e0b; }
+.player.p5{ background:#ec4899; }
+.player.p6{ background:#8b5cf6; }
 
 /* =========================
 MODAL
@@ -243,10 +407,6 @@ MODAL
   align-items:center;
 
   z-index:100;
-}
-
-.hidden{
-  display:none;
 }
 
 .modal-content{
@@ -304,6 +464,75 @@ textarea{
   cursor:pointer;
 }
 
+#skipQuestion{
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+  border:2px solid #ddd;
+  background:white;
+  border-radius:15px;
+  color:#666;
+  font-size:14px;
+  cursor:pointer;
+}
+
+/* =========================
+GAME OVER SCREEN
+========================= */
+
+.game-over-screen{
+  background:white;
+  border-radius:30px;
+  padding:40px;
+  box-shadow:0 20px 40px rgba(0,0,0,0.15);
+  text-align:center;
+  max-width:600px;
+}
+
+.game-over-screen h1{
+  color:#6d28d9;
+  font-size:36px;
+  margin-bottom:20px;
+}
+
+.leaderboard{
+  margin:30px 0;
+  text-align:left;
+}
+
+.leaderboard-item{
+  display:flex;
+  justify-content:space-between;
+  padding:15px;
+  margin:10px 0;
+  background:#f5f5f5;
+  border-radius:10px;
+  font-size:16px;
+  font-weight:600;
+}
+
+.leaderboard-item .rank{
+  color:#8b5cf6;
+  min-width:30px;
+}
+
+.restart-btn{
+  padding:15px 30px;
+  margin-top:20px;
+  border:none;
+  border-radius:15px;
+  background:linear-gradient(135deg,#60a5fa,#8b5cf6);
+  color:white;
+  font-size:18px;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.restart-btn:hover{
+  transform:scale(1.02);
+}
+
 /* =========================
 CONFETTI
 ========================= */
@@ -326,6 +555,16 @@ CONFETTI
 /* =========================
 RESPONSIVE
 ========================= */
+
+@media(max-width:1100px){
+
+  .players-sidebar{
+    right:10px;
+    top:10px;
+    min-width:150px;
+    max-height:300px;
+  }
+}
 
 @media(max-width:900px){
 
@@ -361,6 +600,13 @@ RESPONSIVE
     font-size:13px;
   }
 
+  .players-sidebar{
+    position:static;
+    margin-top:20px;
+    width:100%;
+    max-height:150px;
+  }
+
 }
   </style>
 </head>
@@ -369,7 +615,29 @@ RESPONSIVE
   <!-- Background Blur -->
   <div class="background-blur"></div>
 
-  <div class="game-container">
+  <!-- SETUP SCREEN -->
+  <div class="setup-screen" id="setupScreen">
+    <h1>🎮 Kenali Dirimu</h1>
+    <p>Board Game Refleksi Mental Remaja</p>
+
+    <p style="margin-bottom:20px; font-size:14px; color:#666;">Berapa pemain?</p>
+    <div>
+      <button class="player-count-btn active" data-players="1">1 Pemain</button>
+      <button class="player-count-btn" data-players="2">2 Pemain</button>
+      <button class="player-count-btn" data-players="3">3 Pemain</button>
+      <button class="player-count-btn" data-players="4">4 Pemain</button>
+      <button class="player-count-btn" data-players="5">5 Pemain</button>
+      <button class="player-count-btn" data-players="6">6 Pemain</button>
+    </div>
+
+    <div id="playerInputs"></div>
+
+    <button class="start-btn" id="startGameBtn">Mulai Permainan</button>
+    <button class="start-btn" style="background:#999; margin-top:10px;" id="resetBtn">Reset</button>
+  </div>
+
+  <!-- GAME SCREEN -->
+  <div class="game-container hidden" id="gameScreen">
 
     <!-- BOARD -->
     <div class="board" id="board">
@@ -377,11 +645,11 @@ RESPONSIVE
       <!-- CENTER -->
       <div class="center-panel">
         <h1>Kenali Dirimu</h1>
-        <p class="subtitle">Board Game Refleksi Mental Remaja</p>
+        
+        <div class="current-player" id="currentPlayer">Pemain 1</div>
 
         <div class="score-box">
-          Happiness Point
-          <span id="score">0</span>
+          Poin: <span id="score">0</span>
         </div>
 
         <div class="dice-area">
@@ -390,11 +658,16 @@ RESPONSIVE
         </div>
 
         <div class="dice-result">
-          Hasil Dadu:
-          <span id="diceResult">-</span>
+          Hasil: <span id="diceResult">-</span>
         </div>
       </div>
 
+    </div>
+
+    <!-- PLAYERS INFO SIDEBAR -->
+    <div class="players-sidebar" id="playersSidebar">
+      <h3>📊 Skor Pemain</h3>
+      <div id="playersInfo"></div>
     </div>
 
   </div>
@@ -412,11 +685,17 @@ RESPONSIVE
         placeholder="Tuliskan jawabanmu di sini..."
       ></textarea>
 
-      <button id="submitAnswer">
-        Jawaban Berhasil
-      </button>
+      <button id="submitAnswer">Jawaban Berhasil ✓</button>
+      <button id="skipQuestion">Lewati Pertanyaan</button>
 
     </div>
+  </div>
+
+  <!-- GAME OVER SCREEN -->
+  <div class="setup-screen hidden" id="gameOverScreen">
+    <h1>🏆 Permainan Selesai!</h1>
+    <div class="leaderboard" id="leaderboard"></div>
+    <button class="restart-btn" id="playAgainBtn">Main Lagi</button>
   </div>
 
   <!-- CONFETTI -->
@@ -433,37 +712,142 @@ RESPONSIVE
 
   <script>
 // =========================
-// ELEMENT
+// SETUP SCREEN
+// =========================
+
+const setupScreen = document.getElementById("setupScreen");
+const gameScreen = document.getElementById("gameScreen");
+const gameOverScreen = document.getElementById("gameOverScreen");
+
+let selectedPlayers = 1;
+let players = [];
+let currentPlayerIndex = 0;
+let totalTiles = 20;
+let roundsCompleted = 0;
+const maxRounds = 3;
+
+// Player count selection
+document.querySelectorAll(".player-count-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".player-count-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    selectedPlayers = parseInt(btn.dataset.players);
+    updatePlayerInputs();
+  });
+});
+
+function updatePlayerInputs() {
+  const playerInputs = document.getElementById("playerInputs");
+  playerInputs.innerHTML = "";
+  
+  for (let i = 1; i <= selectedPlayers; i++) {
+    const div = document.createElement("div");
+    div.className = "input-group";
+    div.innerHTML = `
+      <label>Nama Pemain ${i}</label>
+      <input type="text" id="player${i}Name" placeholder="Masukkan nama...">
+    `;
+    playerInputs.appendChild(div);
+  }
+}
+
+document.getElementById("startGameBtn").addEventListener("click", () => {
+  players = [];
+  
+  for (let i = 1; i <= selectedPlayers; i++) {
+    const nameInput = document.getElementById(`player${i}Name`);
+    const playerName = nameInput.value.trim() || `Pemain ${i}`;
+    
+    players.push({
+      name: playerName,
+      position: 0,
+      score: 0,
+      id: i,
+      color: `p${i}`
+    });
+  }
+  
+  startGame();
+});
+
+document.getElementById("resetBtn").addEventListener("click", () => {
+  location.reload();
+});
+
+updatePlayerInputs();
+
+// =========================
+// GAME INITIALIZATION
+// =========================
+
+function startGame() {
+  setupScreen.classList.add("hidden");
+  gameScreen.classList.remove("hidden");
+  currentPlayerIndex = 0;
+  roundsCompleted = 0;
+  
+  createBoard();
+  updateUI();
+}
+
+// =========================
+// CREATE BOARD & PLAYERS
 // =========================
 
 const board = document.getElementById("board");
-const rollBtn = document.getElementById("rollBtn");
-const diceResult = document.getElementById("diceResult");
-const questionModal = document.getElementById("questionModal");
-const questionText = document.getElementById("questionText");
-const submitAnswer = document.getElementById("submitAnswer");
-const answerInput = document.getElementById("answerInput");
-const scoreDisplay = document.getElementById("score");
+const positions = [
+  [10,10], [150,10], [290,10], [430,10], [570,10], [710,10],
+  [710,150], [710,290], [710,430], [710,570],
+  [710,710], [570,710], [430,710], [290,710], [150,710], [10,710],
+  [10,570], [10,430], [10,290], [10,150],
+];
 
-const moveSound = document.getElementById("moveSound");
-const pointSound = document.getElementById("pointSound");
-
-// =========================
-// GAME DATA
-// =========================
-
-let currentPosition = 0;
-let happinessPoint = 0;
-let lastQuestion = "";
-
-const totalTiles = 20;
+function createBoard() {
+  board.innerHTML = "";
+  
+  for(let i = 0; i < totalTiles; i++){
+    const tile = document.createElement("div");
+    tile.classList.add("tile");
+    tile.innerHTML = `<span>Kotak ${i + 1}</span>`;
+    tile.style.left = positions[i][0] + "px";
+    tile.style.top = positions[i][1] + "px";
+    board.appendChild(tile);
+  }
+  
+  // Create player tokens
+  players.forEach(player => {
+    const playerEl = document.createElement("div");
+    playerEl.classList.add("player", player.color);
+    playerEl.id = `player-${player.id}`;
+    playerEl.textContent = player.id;
+    playerEl.style.left = positions[0][0] + 45 + "px";
+    playerEl.style.top = positions[0][1] + 45 + "px";
+    board.appendChild(playerEl);
+  });
+  
+  // Create center panel
+  const centerPanel = document.createElement("div");
+  centerPanel.classList.add("center-panel");
+  centerPanel.innerHTML = `
+    <h1>Kenali Dirimu</h1>
+    <div class="current-player" id="currentPlayer">Pemain 1</div>
+    <div class="score-box">Poin: <span id="score">0</span></div>
+    <div class="dice-area">
+      <div class="dice" id="dice">🎲</div>
+      <button id="rollBtn">Lempar Dadu</button>
+    </div>
+    <div class="dice-result">Hasil: <span id="diceResult">-</span></div>
+  `;
+  board.appendChild(centerPanel);
+  
+  document.getElementById("rollBtn").addEventListener("click", rollDice);
+}
 
 // =========================
 // QUESTIONS
 // =========================
 
 const questions = [
-
   "Apa hal yang paling membuatmu bangga pada dirimu?",
   "Kapan terakhir kali kamu merasa benar-benar didengarkan?",
   "Apa yang biasanya kamu lakukan saat stres?",
@@ -493,251 +877,217 @@ const questions = [
   "Apa hal yang sering kamu sembunyikan dari orang lain?",
   "Bagaimana kamu menunjukkan kasih sayang?",
   "Apa yang membuatmu merasa berharga?",
-  "Apa hal yang paling ingin kamu pelajari tentang dirimu?",
-  "Apa yang membuatmu takut akan masa depan?",
-  "Siapa sosok yang paling menginspirasimu?",
-  "Apa definisi sukses menurutmu?",
-  "Apa yang membuatmu merasa tenang?",
-  "Apa cara favoritmu menghabiskan waktu sendiri?",
-  "Apa hal yang membuatmu sulit percaya diri?",
-  "Apa bentuk self-care favoritmu?",
-  "Apa momen paling bahagia yang kamu ingat?",
-  "Apa yang biasanya kamu lakukan saat kecewa?",
-  "Apa yang ingin kamu ubah dari cara berpikirmu?"
-
+  "Apa hal yang paling ingin kamu pelajari tentang dirimu?"
 ];
 
-// =========================
-// CREATE TILES
-// =========================
+let lastQuestion = "";
 
-const positions = [
-  [10,10],
-  [150,10],
-  [290,10],
-  [430,10],
-  [570,10],
-  [710,10],
-
-  [710,150],
-  [710,290],
-  [710,430],
-  [710,570],
-
-  [710,710],
-  [570,710],
-  [430,710],
-  [290,710],
-  [150,710],
-  [10,710],
-
-  [10,570],
-  [10,430],
-  [10,290],
-  [10,150],
-];
-
-for(let i=0; i<totalTiles; i++){
-
-  const tile = document.createElement("div");
-  tile.classList.add("tile");
-
-  tile.innerHTML = `
-    <span>Kotak ${i + 1}</span>
-  `;
-
-  tile.style.left = positions[i][0] + "px";
-  tile.style.top = positions[i][1] + "px";
-
-  board.appendChild(tile);
+function getRandomQuestion() {
+  let question;
+  do {
+    question = questions[Math.floor(Math.random() * questions.length)];
+  } while(question === lastQuestion);
+  lastQuestion = question;
+  return question;
 }
 
 // =========================
-// PLAYER
+// DICE & MOVEMENT
 // =========================
 
-const player = document.createElement("div");
-player.classList.add("player");
+const rollBtn = document.getElementById("rollBtn");
+const diceResult = document.getElementById("diceResult");
 
-board.appendChild(player);
-
-updatePlayerPosition();
-
-// =========================
-// UPDATE PLAYER POSITION
-// =========================
-
-function updatePlayerPosition(){
-
-  player.style.left = positions[currentPosition][0] + 45 + "px";
-  player.style.top = positions[currentPosition][1] + 45 + "px";
-}
-
-// =========================
-// ROLL DICE
-// =========================
-
-rollBtn.addEventListener("click", async ()=>{
-
+function rollDice() {
   rollBtn.disabled = true;
 
-  // animasi dadu
   let animationCount = 10;
-
-  const interval = setInterval(()=>{
-
+  const interval = setInterval(() => {
     const randomFace = Math.floor(Math.random() * 6) + 1;
     diceResult.textContent = randomFace;
+  }, 100);
 
-  },100);
-
-  setTimeout(async ()=>{
-
+  setTimeout(async () => {
     clearInterval(interval);
-
     const dice = Math.floor(Math.random() * 6) + 1;
-
     diceResult.textContent = dice;
 
     await movePlayer(dice);
-
     showQuestion();
-
     rollBtn.disabled = false;
+  }, 1000);
+}
 
-  },1000);
+async function movePlayer(steps) {
+  const player = players[currentPlayerIndex];
+  const moveSound = document.getElementById("moveSound");
 
-});
-
-// =========================
-// MOVE PLAYER
-// =========================
-
-async function movePlayer(steps){
-
-  for(let i=0; i<steps; i++){
-
-    currentPosition++;
-
-    if(currentPosition >= totalTiles){
-      currentPosition = 0;
+  for(let i = 0; i < steps; i++){
+    player.position++;
+    if(player.position >= totalTiles){
+      player.position = 0;
+      roundsCompleted++;
+      
+      if(roundsCompleted >= maxRounds * selectedPlayers) {
+        endGame();
+        return;
+      }
     }
 
-    updatePlayerPosition();
-
+    updatePlayerPosition(player);
     moveSound.currentTime = 0;
     moveSound.play();
-
     await delay(400);
   }
 }
 
-// =========================
-// DELAY
-// =========================
-
-function delay(ms){
-  return new Promise(resolve => setTimeout(resolve, ms));
+function updatePlayerPosition(player) {
+  const playerEl = document.getElementById(`player-${player.id}`);
+  playerEl.style.left = positions[player.position][0] + 45 + "px";
+  playerEl.style.top = positions[player.position][1] + 45 + "px";
 }
 
 // =========================
-// SHOW QUESTION
+// QUESTION MODAL
 // =========================
 
-function showQuestion(){
+const questionModal = document.getElementById("questionModal");
+const questionText = document.getElementById("questionText");
+const submitAnswer = document.getElementById("submitAnswer");
+const skipQuestion = document.getElementById("skipQuestion");
+const answerInput = document.getElementById("answerInput");
+const scoreDisplay = document.getElementById("score");
+const pointSound = document.getElementById("pointSound");
 
-  let randomQuestion;
-
-  do{
-    randomQuestion =
-      questions[
-        Math.floor(Math.random() * questions.length)
-      ];
-
-  } while(randomQuestion === lastQuestion);
-
-  lastQuestion = randomQuestion;
-
-  questionText.textContent = randomQuestion;
-
+function showQuestion() {
+  const question = getRandomQuestion();
+  questionText.textContent = question;
   answerInput.value = "";
-
   questionModal.classList.remove("hidden");
 }
 
-// =========================
-// SUBMIT ANSWER
-// =========================
-
-submitAnswer.addEventListener("click", ()=>{
-
+submitAnswer.addEventListener("click", () => {
   if(answerInput.value.trim() === ""){
-
     alert("Yuk isi jawaban refleksimu dulu 😊");
     return;
   }
 
-  happinessPoint += 10;
-
-  scoreDisplay.textContent = happinessPoint;
-
-  pointSound.currentTime = 0;
-  pointSound.play();
-
-  createConfetti();
-
-  animateScore();
-
+  awardPoints();
+  nextPlayer();
   questionModal.classList.add("hidden");
 });
 
-// =========================
-// SCORE ANIMATION
-// =========================
+skipQuestion.addEventListener("click", () => {
+  nextPlayer();
+  questionModal.classList.add("hidden");
+});
 
-function animateScore(){
-
-  scoreDisplay.style.transform = "scale(1.3)";
-  scoreDisplay.style.transition = "0.3s";
-
-  setTimeout(()=>{
-    scoreDisplay.style.transform = "scale(1)";
-  },300);
+function awardPoints() {
+  const player = players[currentPlayerIndex];
+  player.score += 10;
+  
+  scoreDisplay.textContent = player.score;
+  pointSound.currentTime = 0;
+  pointSound.play();
+  
+  createConfetti();
+  animateScore();
+  
+  updateUI();
 }
 
 // =========================
-// CONFETTI EFFECT
+// PLAYER TURN MANAGEMENT
 // =========================
 
-function createConfetti(){
+function nextPlayer() {
+  currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+  updateUI();
+  
+  if(roundsCompleted >= maxRounds * selectedPlayers) {
+    setTimeout(endGame, 1000);
+  }
+}
 
+function updateUI() {
+  const currentPlayer = players[currentPlayerIndex];
+  document.getElementById("currentPlayer").textContent = currentPlayer.name;
+  scoreDisplay.textContent = currentPlayer.score;
+  
+  // Update players info sidebar
+  const playersInfo = document.getElementById("playersInfo");
+  playersInfo.innerHTML = players.map((p, idx) => `
+    <div class="player-info ${idx === currentPlayerIndex ? 'active' : ''}">
+      <div class="player-name">${p.name} <span style="color:#888;">[${idx + 1}]</span></div>
+      <div class="player-score">Poin: ${p.score} | Posisi: ${p.position + 1}</div>
+    </div>
+  `).join("");
+}
+
+// =========================
+// GAME END
+// =========================
+
+function endGame() {
+  gameScreen.classList.add("hidden");
+  gameOverScreen.classList.remove("hidden");
+  
+  // Sort players by score
+  const sorted = [...players].sort((a, b) => b.score - a.score);
+  
+  const leaderboard = document.getElementById("leaderboard");
+  leaderboard.innerHTML = sorted.map((p, idx) => `
+    <div class="leaderboard-item">
+      <span class="rank">${idx + 1}. ${p.name}</span>
+      <span>${p.score} Poin</span>
+    </div>
+  `).join("");
+  
+  if(sorted[0].score > 0) {
+    createConfetti();
+  }
+}
+
+document.getElementById("playAgainBtn").addEventListener("click", () => {
+  gameOverScreen.classList.add("hidden");
+  setupScreen.classList.remove("hidden");
+  updatePlayerInputs();
+});
+
+// =========================
+// UTILITIES
+// =========================
+
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function animateScore() {
+  scoreDisplay.style.transform = "scale(1.3)";
+  scoreDisplay.style.transition = "0.3s";
+
+  setTimeout(() => {
+    scoreDisplay.style.transform = "scale(1)";
+  }, 300);
+}
+
+function createConfetti() {
   const container = document.getElementById("confetti-container");
 
-  for(let i=0; i<40; i++){
-
+  for(let i = 0; i < 40; i++){
     const confetti = document.createElement("div");
-
     confetti.classList.add("confetti");
-
     confetti.style.left = Math.random() * window.innerWidth + "px";
-
-    confetti.style.background =
-      `hsl(${Math.random()*360},100%,70%)`;
-
-    confetti.style.animationDuration =
-      (Math.random() * 3 + 2) + "s";
-
-    confetti.style.width =
-      (Math.random() * 8 + 5) + "px";
-
-    confetti.style.height =
-      (Math.random() * 8 + 5) + "px";
+    confetti.style.background = `hsl(${Math.random()*360},100%,70%)`;
+    confetti.style.animationDuration = (Math.random() * 3 + 2) + "s";
+    confetti.style.width = (Math.random() * 8 + 5) + "px";
+    confetti.style.height = (Math.random() * 8 + 5) + "px";
 
     container.appendChild(confetti);
 
-    setTimeout(()=>{
+    setTimeout(() => {
       confetti.remove();
-    },5000);
+    }, 5000);
   }
 }
   </script>
