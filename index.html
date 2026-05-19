@@ -142,6 +142,83 @@ SETUP SCREEN
   transform:scale(1.02);
 }
 
+/* =========================
+PLAYER SELECTION SCREEN
+========================= */
+
+.player-selection-screen{
+  background:white;
+  border-radius:30px;
+  padding:40px;
+  box-shadow:0 20px 40px rgba(0,0,0,0.15);
+  text-align:center;
+  max-width:700px;
+}
+
+.player-selection-screen h1{
+  color:#6d28d9;
+  font-size:36px;
+  margin-bottom:10px;
+}
+
+.player-selection-screen p{
+  color:#666;
+  margin-bottom:30px;
+}
+
+.player-cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(120px, 1fr));
+  gap:15px;
+  margin-bottom:30px;
+}
+
+.player-card{
+  padding:20px;
+  border:3px solid #ddd;
+  background:white;
+  border-radius:15px;
+  cursor:pointer;
+  transition:0.3s;
+  font-weight:600;
+  font-size:16px;
+}
+
+.player-card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 10px 20px rgba(0,0,0,0.1);
+}
+
+.player-card.selected{
+  border-color:#8b5cf6;
+  background:linear-gradient(135deg,#f3e8ff,#ede9fe);
+  box-shadow:0 0 20px rgba(139,92,246,0.3);
+}
+
+.player-card.p1{ border-color:#ef4444; }
+.player-card.p2{ border-color:#3b82f6; }
+.player-card.p3{ border-color:#10b981; }
+.player-card.p4{ border-color:#f59e0b; }
+.player-card.p5{ border-color:#ec4899; }
+.player-card.p6{ border-color:#8b5cf6; }
+
+.continue-btn{
+  width:100%;
+  padding:15px;
+  border:none;
+  border-radius:15px;
+  background:linear-gradient(135deg,#60a5fa,#8b5cf6);
+  color:white;
+  font-size:18px;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.continue-btn:hover{
+  transform:scale(1.02);
+}
+
 .hidden{
   display:none;
 }
@@ -235,6 +312,7 @@ CENTER PANEL
   padding:25px;
 
   box-shadow:0 10px 30px rgba(0,0,0,0.15);
+  z-index:5;
 }
 
 .center-panel h1{
@@ -298,6 +376,8 @@ CENTER PANEL
   font-weight:600;
   cursor:pointer;
   transition:0.3s;
+  position:relative;
+  z-index:20;
 }
 
 #rollBtn:hover{
@@ -330,6 +410,7 @@ PLAYERS INFO SIDEBAR
   max-height:500px;
   overflow-y:auto;
   min-width:200px;
+  z-index:6;
 }
 
 .players-sidebar h3{
@@ -400,24 +481,22 @@ MODAL
 .modal{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,0.5);
-
+  background:rgba(0,0,0,0.7);
   display:flex;
   justify-content:center;
   align-items:center;
-
-  z-index:100;
+  z-index:200;
 }
 
 .modal-content{
   width:90%;
   max-width:500px;
-
   background:white;
   border-radius:25px;
   padding:30px;
-
   animation:popup 0.3s ease;
+  max-height:90vh;
+  overflow-y:auto;
 }
 
 @keyframes popup{
@@ -543,6 +622,7 @@ CONFETTI
   height:10px;
   top:-10px;
   animation:fall linear forwards;
+  z-index:150;
 }
 
 @keyframes fall{
@@ -557,7 +637,6 @@ RESPONSIVE
 ========================= */
 
 @media(max-width:1100px){
-
   .players-sidebar{
     right:10px;
     top:10px;
@@ -567,7 +646,6 @@ RESPONSIVE
 }
 
 @media(max-width:900px){
-
   .board{
     width:95vw;
     height:95vw;
@@ -606,7 +684,6 @@ RESPONSIVE
     width:100%;
     max-height:150px;
   }
-
 }
   </style>
 </head>
@@ -632,8 +709,18 @@ RESPONSIVE
 
     <div id="playerInputs"></div>
 
-    <button class="start-btn" id="startGameBtn">Mulai Permainan</button>
+    <button class="start-btn" id="startGameBtn">Lanjut ke Pemilihan Pemain</button>
     <button class="start-btn" style="background:#999; margin-top:10px;" id="resetBtn">Reset</button>
+  </div>
+
+  <!-- PLAYER SELECTION SCREEN -->
+  <div class="player-selection-screen hidden" id="playerSelectionScreen">
+    <h1>👥 Pilih Pemain yang Mulai Duluan</h1>
+    <p>Klik kartu pemain untuk memilih siapa yang memulai</p>
+
+    <div class="player-cards" id="playerCards"></div>
+
+    <button class="continue-btn" id="continueGameBtn">Mulai Permainan</button>
   </div>
 
   <!-- GAME SCREEN -->
@@ -692,7 +779,7 @@ RESPONSIVE
   </div>
 
   <!-- GAME OVER SCREEN -->
-  <div class="setup-screen hidden" id="gameOverScreen">
+  <div class="game-over-screen hidden" id="gameOverScreen">
     <h1>🏆 Permainan Selesai!</h1>
     <div class="leaderboard" id="leaderboard"></div>
     <button class="restart-btn" id="playAgainBtn">Main Lagi</button>
@@ -716,8 +803,10 @@ RESPONSIVE
 // =========================
 
 const setupScreen = document.getElementById("setupScreen");
+const playerSelectionScreen = document.getElementById("playerSelectionScreen");
 const gameScreen = document.getElementById("gameScreen");
 const gameOverScreen = document.getElementById("gameOverScreen");
+const questionModal = document.getElementById("questionModal");
 
 let selectedPlayers = 1;
 let players = [];
@@ -767,7 +856,7 @@ document.getElementById("startGameBtn").addEventListener("click", () => {
     });
   }
   
-  startGame();
+  goToPlayerSelection();
 });
 
 document.getElementById("resetBtn").addEventListener("click", () => {
@@ -777,15 +866,40 @@ document.getElementById("resetBtn").addEventListener("click", () => {
 updatePlayerInputs();
 
 // =========================
+// PLAYER SELECTION SCREEN
+// =========================
+
+function goToPlayerSelection() {
+  setupScreen.classList.add("hidden");
+  playerSelectionScreen.classList.remove("hidden");
+  
+  const playerCards = document.getElementById("playerCards");
+  playerCards.innerHTML = players.map((p, idx) => `
+    <div class="player-card ${p.color}" data-index="${idx}">
+      ${p.name}
+    </div>
+  `).join("");
+  
+  document.querySelectorAll(".player-card").forEach(card => {
+    card.addEventListener("click", () => {
+      document.querySelectorAll(".player-card").forEach(c => c.classList.remove("selected"));
+      card.classList.add("selected");
+      currentPlayerIndex = parseInt(card.dataset.index);
+    });
+  });
+}
+
+document.getElementById("continueGameBtn").addEventListener("click", () => {
+  playerSelectionScreen.classList.add("hidden");
+  gameScreen.classList.remove("hidden");
+  startGame();
+});
+
+// =========================
 // GAME INITIALIZATION
 // =========================
 
 function startGame() {
-  setupScreen.classList.add("hidden");
-  gameScreen.classList.remove("hidden");
-  currentPlayerIndex = 0;
-  roundsCompleted = 0;
-  
   createBoard();
   updateUI();
 }
@@ -951,7 +1065,6 @@ function updatePlayerPosition(player) {
 // QUESTION MODAL
 // =========================
 
-const questionModal = document.getElementById("questionModal");
 const questionText = document.getElementById("questionText");
 const submitAnswer = document.getElementById("submitAnswer");
 const skipQuestion = document.getElementById("skipQuestion");
@@ -973,13 +1086,10 @@ submitAnswer.addEventListener("click", () => {
   }
 
   awardPoints();
-  nextPlayer();
-  questionModal.classList.add("hidden");
 });
 
 skipQuestion.addEventListener("click", () => {
-  nextPlayer();
-  questionModal.classList.add("hidden");
+  closeQuestion();
 });
 
 function awardPoints() {
@@ -994,6 +1104,12 @@ function awardPoints() {
   animateScore();
   
   updateUI();
+  closeQuestion();
+}
+
+function closeQuestion() {
+  questionModal.classList.add("hidden");
+  nextPlayer();
 }
 
 // =========================
@@ -1005,7 +1121,7 @@ function nextPlayer() {
   updateUI();
   
   if(roundsCompleted >= maxRounds * selectedPlayers) {
-    setTimeout(endGame, 1000);
+    setTimeout(endGame, 500);
   }
 }
 
@@ -1049,9 +1165,7 @@ function endGame() {
 }
 
 document.getElementById("playAgainBtn").addEventListener("click", () => {
-  gameOverScreen.classList.add("hidden");
-  setupScreen.classList.remove("hidden");
-  updatePlayerInputs();
+  location.reload();
 });
 
 // =========================
