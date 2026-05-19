@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kenali Dirimu</title>
+
+  <!-- Font Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Background Blur -->
+  <div class="background-blur"></div>
+
+  <div class="game-container">
+
+    <!-- BOARD -->
+    <div class="board" id="board">
+
+      <!-- CENTER -->
+      <div class="center-panel">
+        <h1>Kenali Dirimu</h1>
+        <p class="subtitle">Board Game Refleksi Mental Remaja</p>
+
+        <div class="score-box">
+          Happiness Point
+          <span id="score">0</span>
+        </div>
+
+        <div class="dice-area">
+          <div class="dice" id="dice">🎲</div>
+          <button id="rollBtn">Lempar Dadu</button>
+        </div>
+
+        <div class="dice-result">
+          Hasil Dadu:
+          <span id="diceResult">-</span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- QUESTION MODAL -->
+  <div class="modal hidden" id="questionModal">
+    <div class="modal-content">
+
+      <h2>Refleksi Diri</h2>
+
+      <p id="questionText"></p>
+
+      <textarea
+        id="answerInput"
+        placeholder="Tuliskan jawabanmu di sini..."
+      ></textarea>
+
+      <button id="submitAnswer">
+        Jawaban Berhasil
+      </button>
+
+    </div>
+  </div>
+
+  <!-- CONFETTI -->
+  <div id="confetti-container"></div>
+
+  <!-- SOUND -->
+  <audio id="moveSound">
+    <source src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3" type="audio/mpeg">
+  </audio>
+
+  <audio id="pointSound">
+    <source src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3" type="audio/mpeg">
+  </audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
