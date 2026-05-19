@@ -1,3 +1,6 @@
+<!-- =========================
+FILE: index.html
+========================= -->
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -10,7 +13,356 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css">
+  <style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:'Poppins',sans-serif;
+  min-height:100vh;
+  background:
+    linear-gradient(
+      135deg,
+      #dbeafe,
+      #ede9fe,
+      #ffffff
+    );
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+  position:relative;
+}
+
+.background-blur{
+  position:absolute;
+  width:500px;
+  height:500px;
+  background:#c4b5fd;
+  filter:blur(150px);
+  opacity:0.4;
+  border-radius:50%;
+}
+
+.game-container{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+
+/* =========================
+BOARD
+========================= */
+
+.board{
+  position:relative;
+  width:850px;
+  height:850px;
+  background:rgba(255,255,255,0.3);
+  border:3px solid rgba(255,255,255,0.5);
+  backdrop-filter:blur(12px);
+  border-radius:30px;
+  box-shadow:0 20px 40px rgba(0,0,0,0.15);
+}
+
+/* =========================
+TILES
+========================= */
+
+.tile{
+  position:absolute;
+  width:120px;
+  height:120px;
+  border-radius:20px;
+  padding:10px;
+  color:#333;
+  font-size:13px;
+  font-weight:600;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  transition:0.3s;
+  box-shadow:0 8px 15px rgba(0,0,0,0.1);
+}
+
+.tile:hover{
+  transform:translateY(-5px) scale(1.03);
+  box-shadow:
+    0 0 20px rgba(255,255,255,0.9),
+    0 10px 20px rgba(0,0,0,0.15);
+}
+
+/* Warna pastel berbeda */
+.tile:nth-child(1){ background:#fde68a; }
+.tile:nth-child(2){ background:#bfdbfe; }
+.tile:nth-child(3){ background:#ddd6fe; }
+.tile:nth-child(4){ background:#fecdd3; }
+.tile:nth-child(5){ background:#bbf7d0; }
+.tile:nth-child(6){ background:#fbcfe8; }
+.tile:nth-child(7){ background:#a5f3fc; }
+.tile:nth-child(8){ background:#fef3c7; }
+.tile:nth-child(9){ background:#c7d2fe; }
+.tile:nth-child(10){ background:#fecaca; }
+.tile:nth-child(11){ background:#d9f99d; }
+.tile:nth-child(12){ background:#ddd6fe; }
+.tile:nth-child(13){ background:#bfdbfe; }
+.tile:nth-child(14){ background:#f5d0fe; }
+.tile:nth-child(15){ background:#bae6fd; }
+.tile:nth-child(16){ background:#fde68a; }
+.tile:nth-child(17){ background:#fecdd3; }
+.tile:nth-child(18){ background:#bbf7d0; }
+.tile:nth-child(19){ background:#ddd6fe; }
+.tile:nth-child(20){ background:#fbcfe8; }
+
+/* =========================
+CENTER PANEL
+========================= */
+
+.center-panel{
+  position:absolute;
+  width:420px;
+  height:420px;
+  background:rgba(255,255,255,0.75);
+  border-radius:30px;
+
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+
+  padding:25px;
+
+  box-shadow:0 10px 30px rgba(0,0,0,0.15);
+}
+
+.center-panel h1{
+  font-size:42px;
+  color:#6d28d9;
+  margin-bottom:10px;
+}
+
+.subtitle{
+  color:#555;
+  margin-bottom:20px;
+}
+
+.score-box{
+  background:linear-gradient(135deg,#818cf8,#c084fc);
+  color:white;
+  padding:15px 30px;
+  border-radius:20px;
+  font-size:18px;
+  margin-bottom:20px;
+  font-weight:600;
+}
+
+.score-box span{
+  display:block;
+  font-size:34px;
+  margin-top:5px;
+}
+
+.dice{
+  width:90px;
+  height:90px;
+  background:white;
+  border-radius:20px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:45px;
+  margin:auto;
+  box-shadow:0 8px 20px rgba(0,0,0,0.15);
+}
+
+#rollBtn{
+  margin-top:18px;
+  padding:14px 28px;
+  border:none;
+  border-radius:15px;
+  background:linear-gradient(135deg,#60a5fa,#8b5cf6);
+  color:white;
+  font-size:16px;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+#rollBtn:hover{
+  transform:scale(1.05);
+}
+
+.dice-result{
+  margin-top:20px;
+  font-size:20px;
+  font-weight:600;
+}
+
+/* =========================
+PLAYER
+========================= */
+
+.player{
+  position:absolute;
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  background:#ef4444;
+  border:3px solid white;
+  transition:
+    top 0.45s ease,
+    left 0.45s ease;
+
+  z-index:10;
+  box-shadow:0 0 15px rgba(239,68,68,0.9);
+}
+
+/* =========================
+MODAL
+========================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.5);
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  z-index:100;
+}
+
+.hidden{
+  display:none;
+}
+
+.modal-content{
+  width:90%;
+  max-width:500px;
+
+  background:white;
+  border-radius:25px;
+  padding:30px;
+
+  animation:popup 0.3s ease;
+}
+
+@keyframes popup{
+  from{
+    transform:scale(0.8);
+    opacity:0;
+  }
+  to{
+    transform:scale(1);
+    opacity:1;
+  }
+}
+
+.modal-content h2{
+  color:#7c3aed;
+  margin-bottom:20px;
+}
+
+.modal-content p{
+  margin-bottom:20px;
+  line-height:1.6;
+}
+
+textarea{
+  width:100%;
+  height:120px;
+  resize:none;
+  border-radius:15px;
+  border:2px solid #ddd;
+  padding:15px;
+  font-family:'Poppins',sans-serif;
+  margin-bottom:20px;
+}
+
+#submitAnswer{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:15px;
+  background:linear-gradient(135deg,#60a5fa,#8b5cf6);
+  color:white;
+  font-size:16px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+/* =========================
+CONFETTI
+========================= */
+
+.confetti{
+  position:fixed;
+  width:10px;
+  height:10px;
+  top:-10px;
+  animation:fall linear forwards;
+}
+
+@keyframes fall{
+  to{
+    transform:translateY(100vh) rotate(720deg);
+    opacity:0;
+  }
+}
+
+/* =========================
+RESPONSIVE
+========================= */
+
+@media(max-width:900px){
+
+  .board{
+    width:95vw;
+    height:95vw;
+  }
+
+  .tile{
+    width:16vw;
+    height:16vw;
+    font-size:10px;
+  }
+
+  .center-panel{
+    width:48vw;
+    height:48vw;
+    padding:15px;
+  }
+
+  .center-panel h1{
+    font-size:5vw;
+  }
+
+  .dice{
+    width:60px;
+    height:60px;
+    font-size:30px;
+  }
+
+  #rollBtn{
+    padding:10px 16px;
+    font-size:13px;
+  }
+
+}
+  </style>
 </head>
 <body>
 
@@ -79,6 +431,315 @@
     <source src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3" type="audio/mpeg">
   </audio>
 
-  <script src="script.js"></script>
+  <script>
+// =========================
+// ELEMENT
+// =========================
+
+const board = document.getElementById("board");
+const rollBtn = document.getElementById("rollBtn");
+const diceResult = document.getElementById("diceResult");
+const questionModal = document.getElementById("questionModal");
+const questionText = document.getElementById("questionText");
+const submitAnswer = document.getElementById("submitAnswer");
+const answerInput = document.getElementById("answerInput");
+const scoreDisplay = document.getElementById("score");
+
+const moveSound = document.getElementById("moveSound");
+const pointSound = document.getElementById("pointSound");
+
+// =========================
+// GAME DATA
+// =========================
+
+let currentPosition = 0;
+let happinessPoint = 0;
+let lastQuestion = "";
+
+const totalTiles = 20;
+
+// =========================
+// QUESTIONS
+// =========================
+
+const questions = [
+
+  "Apa hal yang paling membuatmu bangga pada dirimu?",
+  "Kapan terakhir kali kamu merasa benar-benar didengarkan?",
+  "Apa yang biasanya kamu lakukan saat stres?",
+  "Hal apa yang ingin kamu perbaiki dari dirimu?",
+  "Apa arti bahagia menurutmu?",
+  "Siapa orang yang paling membuatmu nyaman?",
+  "Apa ketakutan terbesar yang pernah kamu sembunyikan?",
+  "Bagaimana cara kamu menenangkan diri saat sedih?",
+  "Apa pencapaian kecil yang membuatmu senang?",
+  "Apa yang ingin kamu katakan pada dirimu 5 tahun lalu?",
+  "Apa hal kecil yang membuat harimu lebih baik?",
+  "Kapan terakhir kali kamu merasa sangat percaya diri?",
+  "Apa yang paling kamu syukuri hari ini?",
+  "Apa yang membuatmu merasa aman?",
+  "Bagaimana hubunganmu dengan dirimu sendiri?",
+  "Apa emosi yang paling sering kamu rasakan akhir-akhir ini?",
+  "Apa yang biasanya membuatmu overthinking?",
+  "Apa cara favoritmu untuk healing?",
+  "Apa mimpi terbesar yang ingin kamu capai?",
+  "Apa kebiasaan buruk yang ingin kamu ubah?",
+  "Apa hal yang paling kamu sukai dari kepribadianmu?",
+  "Apa yang membuatmu merasa dicintai?",
+  "Apa pengalaman yang paling membentuk dirimu?",
+  "Apa yang paling sulit kamu ungkapkan?",
+  "Apa arti persahabatan bagimu?",
+  "Apa cara terbaik menurutmu untuk menghadapi kegagalan?",
+  "Apa hal yang sering kamu sembunyikan dari orang lain?",
+  "Bagaimana kamu menunjukkan kasih sayang?",
+  "Apa yang membuatmu merasa berharga?",
+  "Apa hal yang paling ingin kamu pelajari tentang dirimu?",
+  "Apa yang membuatmu takut akan masa depan?",
+  "Siapa sosok yang paling menginspirasimu?",
+  "Apa definisi sukses menurutmu?",
+  "Apa yang membuatmu merasa tenang?",
+  "Apa cara favoritmu menghabiskan waktu sendiri?",
+  "Apa hal yang membuatmu sulit percaya diri?",
+  "Apa bentuk self-care favoritmu?",
+  "Apa momen paling bahagia yang kamu ingat?",
+  "Apa yang biasanya kamu lakukan saat kecewa?",
+  "Apa yang ingin kamu ubah dari cara berpikirmu?"
+
+];
+
+// =========================
+// CREATE TILES
+// =========================
+
+const positions = [
+  [10,10],
+  [150,10],
+  [290,10],
+  [430,10],
+  [570,10],
+  [710,10],
+
+  [710,150],
+  [710,290],
+  [710,430],
+  [710,570],
+
+  [710,710],
+  [570,710],
+  [430,710],
+  [290,710],
+  [150,710],
+  [10,710],
+
+  [10,570],
+  [10,430],
+  [10,290],
+  [10,150],
+];
+
+for(let i=0; i<totalTiles; i++){
+
+  const tile = document.createElement("div");
+  tile.classList.add("tile");
+
+  tile.innerHTML = `
+    <span>Kotak ${i + 1}</span>
+  `;
+
+  tile.style.left = positions[i][0] + "px";
+  tile.style.top = positions[i][1] + "px";
+
+  board.appendChild(tile);
+}
+
+// =========================
+// PLAYER
+// =========================
+
+const player = document.createElement("div");
+player.classList.add("player");
+
+board.appendChild(player);
+
+updatePlayerPosition();
+
+// =========================
+// UPDATE PLAYER POSITION
+// =========================
+
+function updatePlayerPosition(){
+
+  player.style.left = positions[currentPosition][0] + 45 + "px";
+  player.style.top = positions[currentPosition][1] + 45 + "px";
+}
+
+// =========================
+// ROLL DICE
+// =========================
+
+rollBtn.addEventListener("click", async ()=>{
+
+  rollBtn.disabled = true;
+
+  // animasi dadu
+  let animationCount = 10;
+
+  const interval = setInterval(()=>{
+
+    const randomFace = Math.floor(Math.random() * 6) + 1;
+    diceResult.textContent = randomFace;
+
+  },100);
+
+  setTimeout(async ()=>{
+
+    clearInterval(interval);
+
+    const dice = Math.floor(Math.random() * 6) + 1;
+
+    diceResult.textContent = dice;
+
+    await movePlayer(dice);
+
+    showQuestion();
+
+    rollBtn.disabled = false;
+
+  },1000);
+
+});
+
+// =========================
+// MOVE PLAYER
+// =========================
+
+async function movePlayer(steps){
+
+  for(let i=0; i<steps; i++){
+
+    currentPosition++;
+
+    if(currentPosition >= totalTiles){
+      currentPosition = 0;
+    }
+
+    updatePlayerPosition();
+
+    moveSound.currentTime = 0;
+    moveSound.play();
+
+    await delay(400);
+  }
+}
+
+// =========================
+// DELAY
+// =========================
+
+function delay(ms){
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// =========================
+// SHOW QUESTION
+// =========================
+
+function showQuestion(){
+
+  let randomQuestion;
+
+  do{
+    randomQuestion =
+      questions[
+        Math.floor(Math.random() * questions.length)
+      ];
+
+  } while(randomQuestion === lastQuestion);
+
+  lastQuestion = randomQuestion;
+
+  questionText.textContent = randomQuestion;
+
+  answerInput.value = "";
+
+  questionModal.classList.remove("hidden");
+}
+
+// =========================
+// SUBMIT ANSWER
+// =========================
+
+submitAnswer.addEventListener("click", ()=>{
+
+  if(answerInput.value.trim() === ""){
+
+    alert("Yuk isi jawaban refleksimu dulu 😊");
+    return;
+  }
+
+  happinessPoint += 10;
+
+  scoreDisplay.textContent = happinessPoint;
+
+  pointSound.currentTime = 0;
+  pointSound.play();
+
+  createConfetti();
+
+  animateScore();
+
+  questionModal.classList.add("hidden");
+});
+
+// =========================
+// SCORE ANIMATION
+// =========================
+
+function animateScore(){
+
+  scoreDisplay.style.transform = "scale(1.3)";
+  scoreDisplay.style.transition = "0.3s";
+
+  setTimeout(()=>{
+    scoreDisplay.style.transform = "scale(1)";
+  },300);
+}
+
+// =========================
+// CONFETTI EFFECT
+// =========================
+
+function createConfetti(){
+
+  const container = document.getElementById("confetti-container");
+
+  for(let i=0; i<40; i++){
+
+    const confetti = document.createElement("div");
+
+    confetti.classList.add("confetti");
+
+    confetti.style.left = Math.random() * window.innerWidth + "px";
+
+    confetti.style.background =
+      `hsl(${Math.random()*360},100%,70%)`;
+
+    confetti.style.animationDuration =
+      (Math.random() * 3 + 2) + "s";
+
+    confetti.style.width =
+      (Math.random() * 8 + 5) + "px";
+
+    confetti.style.height =
+      (Math.random() * 8 + 5) + "px";
+
+    container.appendChild(confetti);
+
+    setTimeout(()=>{
+      confetti.remove();
+    },5000);
+  }
+}
+  </script>
 </body>
 </html>
